@@ -53,3 +53,16 @@ steps:
     targetPath: '$(Build.Repository.LocalPath)/build/ArmTemplate' #replace with the package.json folder
     artifact: 'ArmTemplates'
     publishLocation: 'pipeline'
+
+
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'MCAPS_External_2026'
+    subscriptionId: '29a758e9-24b3-4a3a-ad15-f994b81536b4'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'adf-cicd-rg'
+    location: 'East US'
+    templateLocation: 'Linked artifact'
+    csmFile: '$(Build.Repository.LocalPath)/build/ArmTemplate'
+    deploymentMode: 'Incremental'
