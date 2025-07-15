@@ -23,22 +23,7 @@ jobs:
       run: npm install
       working-directory: ${{github.workspace}}/  # (1) provide the folder location of the package.json file
         
-# Validates all of the Data Factory resources in the repository. You'll get the same validation errors as when "Validate All" is selected.
-    - name: Validate
-      run: npm run build validate ${{github.workspace}}/ /subscriptions/<<yourSubscriptionID>>/resourceGroups/<<yourResourceGroup>>/providers/Microsoft.DataFactory/factories/<<dataFactoryName>> # (2) The validate command needs the root folder location of your repository where all the objects are stored. And the 2nd parameter is the resourceID of the ADF instance 
-      working-directory: ${{github.workspace}}/
- 
 
-    - name: Validate and Generate ARM template
-      run: npm run build export ${{github.workspace}}/ /subscriptions/<<yourSubscriptionID>>/resourceGroups/<<yourResourceGroup>>/providers/Microsoft.DataFactory/factories/<<dataFactoryName>> "ExportedArmTemplate"  # (3) The build command, as validate, needs the root folder location of your repository where all the objects are stored. And the 2nd parameter is the resourceID of the ADF instance. The 3rd parameter is the exported ARM template artifact name 
-      working-directory: ${{github.workspace}}/
- 
-# In order to leverage the artifact in another job, we need to upload it with the upload action 
-    - name: upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: ExportedArmTemplate # (4) use the same artifact name you used in the previous export step
-        path: ${{github.workspace}}/ExportedArmTemplate
 
   release:
     needs: build
@@ -50,7 +35,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ExportedArmTemplate # (5) Artifact name
-
 
       - name: Login via Az module
         uses: azure/login@v1
