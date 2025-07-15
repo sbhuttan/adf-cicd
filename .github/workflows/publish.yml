@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-    - adf_publish
+    - main
 
 permissions:
       id-token: write
